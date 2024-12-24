@@ -4,11 +4,13 @@ const products = require('./data/products')
 
 // Returns an instance of http.Server class
 const server = http.createServer((req, res) => {
-    // 1. Set status code
-    // 2. Set content type to send back
-    res.writeHead(200, { 'Content-Type': 'application/json' })
-    // 3. Writing to body (Note: we have to convert to string, Express does it automatically though)
-    res.end(JSON.stringify(products))
+    if (req.url === '/api/products' && req.method === 'GET') {
+        res.writeHead(200, { 'Content-Type': 'application/json' })
+        res.end(JSON.stringify(products))
+    } else {
+        res.writeHead(404, { 'Content-Type': 'application/json' })
+        res.end(JSON.stringify({ message: 'Route not found' }))
+    }
 })
 
 // Checks if there is an environment variable first
