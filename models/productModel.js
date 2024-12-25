@@ -1,5 +1,5 @@
 // Import the JSON
-const products = require('../data/products')
+let products = require('../data/products')
 const { v4: uuidv4 } = require('uuid')
 
 const { writeDataToFile } = require('../utils')
@@ -38,10 +38,20 @@ function update(id, product) {
     })
 }
 
+function remove(id) {
+    return new Promise((resolve, reject)=> {
+        // Rewriting all the products to the JSON that don't match the id we want to remove
+        products = products.filter((p) => p.id !== id)
+        writeDataToFile('./data/products.json', products)
+        resolve()
+    })
+}
+
 // Since used in other module we have to export this find function
 module.exports = {
     findAll,
     findById,
     create,
-    update
+    update,
+    remove
 }
