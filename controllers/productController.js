@@ -39,6 +39,18 @@ async function getProduct(req, res, id) {
 // @route   POST /api/products
 async function createProduct(req, res) {
     try {
+        // We don't include ID, we want it to automatically be added (as in a database)
+        const product = {
+            title: 'Test Product',
+            description: 'This is my product',
+            price: 100
+        }
+
+        const newProduct = await Product.create(product)
+
+        // 201: Created successfully
+        res.writeHead(201, { 'Content-Type': 'application/json' })
+        return res.end(JSON.stringify(newProduct))
 
     } catch (error) {
         console.log(error)

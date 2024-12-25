@@ -20,5 +20,8 @@
   "homepage": "https://github.com/panem-enzo/rest-api-nodejs-vanilla#readme",
   "devDependencies": {
     "nodemon": "^3.1.9"
+  },
+  "dependencies": {
+    "uuid": "^11.0.3"
   }
 }
