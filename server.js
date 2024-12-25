@@ -1,17 +1,28 @@
 const http = require('http')
-// Import the JSON
-const products = require('./data/products')
+// Destructuring
+const { getProducts, getProduct, createProduct, updateProduct, deleteProduct } = require('./controllers/productController')
 
 // Returns an instance of http.Server class
 const server = http.createServer((req, res) => {
-    // 1. Set status code
-    res.statusCode = 200
-    // 2. Set content type to send back
-    res.setHeader('Content-Type', 'text/html')
-    // 3. Writing to body
-    res.write('<h1>Hello World!</h1>')
-    // 4. No more data will be written
-    res.end()
+    if (req.url === '/api/products' && req.method === 'GET') {
+        getProducts(req, res)
+    // Find the ID of the product
+    // product/1 to product/1000...
+    } else if(req.url.match(/\/api\/products\/([0-9]+)/) && req.method === 'GET') {
+        const id = req.url.split('/')[3] // Returns the id number in the url
+        getProduct(res, req, id)
+    } else if(req.url === '/api/products' && req.method === 'POST') {
+        createProduct(req, res)
+    } else if(req.url.match(/\/api\/products\/([0-9]+)/) && req.method === 'PUT') {
+        const id = req.url.split('/')[3]
+        updateProduct(req, res, id)
+    } else if(req.url.match(/\/api\/products\/([0-9]+)/) && req.method === 'DELETE') {
+        const id = req.url.split('/')[3]
+        deleteProduct(req, res, id)
+    } else {
+        res.writeHead(404, { 'Content-Type': 'application/json' })
+        res.end(JSON.stringify({ message: 'Route not found' }))
+    }
 })
 
 // Checks if there is an environment variable first
